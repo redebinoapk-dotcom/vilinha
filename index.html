@@ -95,7 +95,7 @@
     <form>
       <br />
       <div id="minha-div" class="button-container">
-        <button class="button" onclick="getLocation()" type="button">Ir para Controle de Acesso</button>
+        <button id="btnGeo" class="button" onclick="getLocation()" type="button">Ir para Controle de Acesso</button>
       </div>
     </form>
   </div>
@@ -159,6 +159,11 @@
         return Math.round(distance * 1.609344 * 1000, 2);
       }
     }
+
+    const button1 = document.getElementById("btnGeo");
+    button1.addEventListener("click\, function() {
+    button1.textContent = "Processando...";
+    });
   </script>
 
 </body>

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <base target="_top">
+  <title>Controle de Acesso</title>
+  <style>
+    body {
+      color: #434343;
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      font-size: 3vh;
+      background-color: #eeeeee;
+      margin-top: 10vh;
+    }
+
+    .container {
+      margin: 0 auto;
+      max-width: 800px;
+      padding: 30px;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+      background-color: #ffffff;
+      border-radius: 20px;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      margin-top: 0px;
+      color: #0ee6b1;
+      font-size: 3vh;
+    }
+
+    #titleGreen {
+      color: #00E1AA;
+    }
+
+    #titleBlack {
+      color: #000000;
+    }
+
+    h3 {
+      text-align: center;
+      margin-bottom: 40px;
+      margin-top: 0px;
+      color: #336859;
+      font-size: 2vh;
+    }
+
+    .button-container {
+      box-sizing: border-box;
+      clear: both;
+      margin: 1px 0 0;
+      padding: 4px 0;
+      position: relative;
+      width: 100%;
+    }
+
+    .button {
+      background: #00E1AA;
+      border: none;
+      border-radius: 20px;
+      color: #ffffff;
+      cursor: pointer;
+      display: block;
+      font-weight: bold;
+      font-size: 3vh;
+      padding: 15px 0;
+      text-align: center;
+      text-transform: uppercase;
+      width: 100%;
+      -webkit-transition: background 250ms ease;
+      -moz-transition: background 250ms ease;
+      -o-transition: background 250ms ease;
+      transition: background 250ms ease;
+    }
+
+    p {
+      text-align: center;
+      text-decoration: none;
+      color: green;
+      font-size: 3vh;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h2><span id="titleGreen">Vilinha</span><span id="titleBlack">&nbsp;Jabaquara</span></h2>
+    <h3>Controle de Acesso</h3>
+    <hr>
+    <p>Seja bem vindo!</p>
+    <p id="demo"></p>
+    <hr>
+    <form>
+      <br />
+      <div id="minha-div" class="button-container">
+        <button class="button" onclick="getLocation()" type="button">Ir para Controle de Acesso</button>
+      </div>
+    </form>
+  </div>
+
+  <script>
+    const x = document.getElementById("demo");
+
+    function getLocation() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(success, error);
+      } else { 
+        x.innerHTML = "Geolocation is not supported by this browser.";
+      }
+    }
+
+    function success(position) {
+      // x.innerHTML = "Latitude: " + position.coords.latitude + 
+      // "<br>Longitude: " + position.coords.longitude;
+    
+      // getDistanceBetweenPoints(position.coords.latitude, position.coords.longitude, unit = 'meters')
+
+      var distancia = getDistanceBetweenPoints(position.coords.latitude, position.coords.longitude, unit = 'meters');
+      
+      // x.innerHTML = "Latitude: " + position.coords.latitude + 
+      // "<br>Longitude: " + position.coords.longitude + 
+      // "<br>Distancia da Vilinha (metros): " + distancia;
+      
+      // x.innerHTML = "Distancia da Vilinha (metros): " + distancia;
+
+      if (distancia < 100) {
+        x.innerHTML = "Distância da Vilinha (metros): " + distancia;
+        window.top.location.replace("http://vilinha.ddns.net:10163/bibi");
+      }
+      else {
+        // alert("Voce esta um pouco distante da Vilinha. Tente novamente!");
+        x.innerHTML = "Você está a aproximadamente " + distancia + " metros da Vilinha. Acesso negado. Aproxime-se e tente novamente!";
+
+        document.getElementById("minha-div").style.display = 'none';
+      }
+    }
+
+    function error() {
+      alert("Desculpe, localização não disponível.");
+    }
+
+    function getDistanceBetweenPoints(latitudeOrigem, longitudeOrigem, unit = 'meters') {
+        // Adquirir latitude e longitude, ao lado do portão de entrada: https://www.w3schools.com/html/tryit.asp?filename=tryhtml5_geolocation
+      let latitudeVilinha = -23.6514992;
+      let longitudeVilinha = -46.635783;
+
+      let theta = longitudeVilinha - longitudeOrigem;
+      let distance = 60 * 1.1515 * (180 / Math.PI) * Math.acos(
+        Math.sin(latitudeVilinha * (Math.PI / 180)) * Math.sin(latitudeOrigem * (Math.PI / 180)) +
+        Math.cos(latitudeVilinha * (Math.PI / 180)) * Math.cos(latitudeOrigem * (Math.PI / 180)) * Math.cos(theta * (Math.PI / 180))
+      );
+      if (unit == 'miles') {
+        return Math.round(distance, 2);
+      } else if (unit == 'kilometers') {
+        return Math.round(distance * 1.609344, 2);
+      } else if (unit == 'meters') {
+        return Math.round(distance * 1.609344 * 1000, 2);
+      }
+    }
+  </script>
+
+</body>
+
+</html>
